@@ -19,6 +19,18 @@ over.
   — the order of operations and the validation that keep a live cert rotation from
   becoming an outage, and why validating from a browser gives you a false green.
 
+- **[Designing Conditional Access by country, network, and application](docs/conditional-access-by-location-and-app.md)**
+  — why country blocks and IP allow-lists disappoint, the layered pattern that doesn't, and
+  the forgotten exclusions that quietly become the attack surface.
+
+- **[Reducing a tenant's exposure: what to measure, what to attack first, how to make it stick](docs/reducing-tenant-exposure.md)**
+  — why chasing a secure-score number misleads, the blast-radius order to fix things in,
+  and why drift detection is what makes hardening last.
+
+- **[Building Microsoft Graph automation with genuinely minimal permissions](docs/graph-automation-minimal-permissions.md)**
+  — where over-privileged app identities actually come from, least-privilege per task, and
+  killing the client secret with certificates and workload identity federation.
+
 ## A note on scope
 
 These are methodology and technique. They contain no organization-specific detail — no
