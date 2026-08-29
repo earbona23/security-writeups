@@ -77,9 +77,26 @@ Get-EhRoleAssignment | Where-Object Tipo -eq 'Permanente'   # standing admin acc
 The goal is zero rows in the first and as few as possible in the second — permanent
 assignments converted to eligible so activation is time-bound and logged.
 
-**Legacy authentication.** Measure it from sign-in logs (filter for legacy client apps),
-then block it with a Conditional Access policy and confirm the legacy sign-ins stop. This
-is the single highest-leverage block in most tenants.
+**Legacy authentication.** Measure it before you block it, because blocking blind is how
+you take down the one service account that still speaks IMAP. The sign-in logs carry a
+`clientAppUsed` field, and the legacy protocols are the ones that can't do interactive
+auth. In a Log Analytics workspace fed by sign-in logs, that's:
+
+```kusto
+SigninLogs
+| where TimeGenerated > ago(30d)
+| where ClientAppUsed in ("Other clients", "IMAP4", "POP3", "SMTP", "MAPI",
+                          "Exchange ActiveSync", "Authenticated SMTP")
+| summarize attempts = count(), lastSeen = max(TimeGenerated)
+    by UserPrincipalName, ClientAppUsed, AppDisplayName
+| sort by attempts desc
+```
+
+That list tells you exactly which accounts and apps will break, so you can migrate or
+exempt them deliberately before the Conditional Access block goes from report-only to
+enforced. Then confirm the legacy sign-ins drop to zero. This is the single
+highest-leverage block in most tenants, because legacy protocols bypass Conditional
+Access and MFA entirely — no policy you write applies to them until they're blocked.
 
 **Application permissions.** Rank app identities by capability, not count, and prune. I
 built an open auditor for exactly this —

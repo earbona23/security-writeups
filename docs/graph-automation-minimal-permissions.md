@@ -67,6 +67,23 @@ that API's Graph documentation, which lists them from least to most privileged, 
 the first one that applies. If a call works with `Group.Read.All`, don't grant
 `Group.ReadWrite.All`. This is tedious and it is the whole job.
 
+The delegated-versus-application decision is worth making explicitly rather than by habit.
+Take a script that emails a weekly report from a shared mailbox. The lazy grant is app-only
+`Mail.Send`, which lets the app send as *anyone* in the tenant — an enormous capability for
+a one-mailbox job. If the automation can instead run as a service account that has access
+to just that mailbox, delegated `Mail.Send` sends only as that account, and a compromise of
+the app can impersonate one mailbox rather than the whole organization. Same task, a
+difference of tenant-wide versus single-mailbox blast radius, decided entirely by which
+model you reach for first. The rule of thumb: if you can name the single identity the
+automation acts as, delegated is almost always the smaller choice; reserve app-only for
+work that genuinely spans the tenant with no user in the loop.
+
+Where app-only is unavoidable, narrow the grant further with resource scoping where the
+workload supports it. For Exchange, RBAC for Applications can bind an app-only mail
+permission to a specific mailbox or a management scope, so `Mail.Read` no longer means
+*every* mailbox. It doesn't exist for every Graph surface, but where it does, it's the
+difference between "reads one mailbox" and "reads the tenant."
+
 Authenticate with a certificate instead of a secret:
 
 ```powershell
