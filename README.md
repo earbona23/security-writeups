@@ -1,9 +1,9 @@
 # Security writeups
 
-> **Snapshot, not maintained.** This tool works and its tests pass, but it is not under
-> active development: I am not adding features and I do not review pull requests on a
-> schedule. Issues are welcome and I do read them — a reply may take a while. Last
-> substantive change: September 2026.
+> **Snapshot, not maintained.** These writeups stand as published, but this repository is
+> not under active development: I am not adding new material on a schedule. Issues and
+> corrections are welcome and I do read them — a reply may take a while. Last substantive
+> change: September 2026.
 >
 > Maintained instead: [revtriage](https://github.com/earbona23/revtriage),
 > [entra-tripwire](https://github.com/earbona23/entra-tripwire),
